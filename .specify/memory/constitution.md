@@ -1,129 +1,125 @@
 <!--
 Sync Impact Report
 ==================
-Version change: (unset placeholder) → 1.0.0
-  - Initial constitution materialization. The previous `.specify/memory/constitution.md`
-    contained only the untouched `constitution-template` placeholders.
-Modified principles: N/A (initial version — no prior principles to rename).
+Version change: 1.0.0 -> 2.0.0
+Modified principles:
+  - I. Directorio `constitution/` como fuente de verdad -> I. Public-Interest Mission
+  - II. Gobernanza por capas -> II. Ethics, Privacy & Compliance
+  - III. Normas declarativas y verificables -> III. Open Science & Reproducibility
+  - IV. Responsabilidad por dominio -> IV. Explainability & Model Transparency
+  - V. Revisión de cumplimiento -> V. Spec-Driven Technical Standards
 Added sections:
-  - Core Principles (5): Directory-as-Source-of-Truth, Layered Governance,
-    Testable & Declarative Rules, Area Ownership, Compliance Review.
-  - Governing Documents
+  - Additional Constraints
   - Development Workflow & Quality Gates
-  - Governance (amendment procedure, versioning policy, compliance expectations).
-Removed sections: none.
-Follow-up TODOs: none.
+Removed sections:
+  - Governing Documents (the previous Toolyo-specific document inventory)
+Follow-up TODOs:
+  - RATIFICATION_DATE remains a TODO because the original adoption date was not provided.
 -->
 
-# Toolyo Constitution
-
-La presente constitución define los principios y normas no negociables que rigen
-todo desarrollo y diseño del proyecto **Toolyo**. Los documentos del directorio
-`constitution/` son la fuente única de verdad normativa del proyecto y deben ser
-consultados y respetados antes y durante cualquier implementación o decisión de
-diseño.
+# HomeVal Constitution
 
 ## Core Principles
 
-### I. Directorio `constitution/` como fuente de verdad
+### I. Public-Interest Mission
 
-Los documentos del directorio `constitution/` son principios rectores obligatorios.
-Todo desarrollo (backend, frontend, base de datos), todo diseño (visual, UX) y toda
-decisión técnica DEBE alinearse con lo establecido en esos documentos. Cuando exista
-conflicto entre una práctica puntual y lo dispuesto en el directorio, prevalece el
-directorio salvo modificación formal tramitada por el proceso de enmienda descrito en
-la sección de Governance.
+HomeVal MUST democratize access to real-estate valuation data across Spain. The project
+MUST operate as an open-source, public-interest engine that reduces information
+asymmetry for buyers, renters, urban researchers, and journalists. Features and
+technical decisions MUST be evaluated against this mission so that access to useful
+valuation information is not restricted to privileged market participants.
 
-### II. Gobernanza por capas
+### II. Ethics, Privacy & Compliance
 
-Cada documento cubre un dominio específico y complementario, sin solapamientos
-ambiguos:
-- `BACKEND.md` — API, capa de aplicación, capa de datos y servicios externos.
-- `DATABASE.md` — modelado, operaciones, migraciones y optimización de PostgreSQL/Prisma.
-- `DESIGN.md` — tokens visuales, tema `profesional-seguro` y accesibilidad.
-- `FRONTEND.md` — Next.js App Router, componentes y estado del cliente.
-- `SECURITY.md` — seguridad transversal (autenticación, autorización, protección de datos).
-- `TESTING.md` — pirámide de testing, herramientas y criterios de calidad.
+HomeVal MUST comply with the GDPR and applicable Spanish data-protection regulations.
+The system MUST store zero personally identifiable information (PII). Spatial data and
+analytics MUST operate only on aggregated cadastral polygons, postal codes, and census
+tracts (*secciones censales*). Data models, ingestion pipelines, APIs, exports, logs,
+and observability data MUST be reviewed to prevent direct or indirect re-identification.
+These constraints protect residents while preserving the public value of aggregated
+analysis.
 
-Estos documentos son la fuente de la que derivan las reglas concretas de cada área.
-Ninguna implementación puede contradecir lo que su documento de dominio establece.
+### III. Open Science & Reproducibility
 
-### III. Normas declarativas y verificables
+Datasets, engineered features, models, evaluation metrics, and material transformations
+MUST be documented and transparent enough to reproduce the published results. Data
+pipelines and model-training workflows MUST be reproducible from open public data feeds,
+including Catastro, INE, and OpenStreetMap where applicable. A change to a source,
+transformation, feature, model, or metric MUST identify its provenance and effect on
+results. Reproducibility is required to enable independent scrutiny and correction.
 
-Toda regla del directorio `constitution/` DEBE ser declarativa, verificable y libre de
-ambigüedad. Se prohíben las normas en lenguaje vago ("debería", "se recomienda") cuando
-definen comportamientos obligatorios; en su lugar se usan imperativos normativos (MUST /
-DEBE) con su justificación explícita cuando no sea evidente.
+### IV. Explainability & Model Transparency
 
-### IV. Responsabilidad por dominio
+Every price prediction MUST expose feature-attribution metrics, including SHAP values or
+an explicitly documented equivalent, that identify the exact drivers of the result.
+Attributions MUST communicate the direction and magnitude of each material feature's
+contribution, including positive and negative value where applicable. The product MUST
+not present a prediction as an unexplained black-box output; users need enough context
+to assess limitations and make informed decisions.
 
-Cada área funcional tiene un documento propietario. Los cambios que afecten a un dominio
-DEBEN revisarse contra su documento correspondiente. Si una decisión de diseño afecta a
-varios dominios (p. ej. una entidad de datos que también define contratos de API y de UI),
-la decisión DEBE cumplir simultáneamente todos los documentos implicados.
+### V. Spec-Driven Technical Standards
 
-### V. Revisión de cumplimiento
+Every feature MUST follow the SpecKit workflow in order:
+`/constitution` -> `/specify` -> `/clarify` -> `/plan` -> `/tasks` -> `/analyze` ->
+`/implement`. Code MUST preserve strict type safety and comprehensive test coverage.
+Spatial functionality MUST include performance benchmarks for its indexing and query
+paths before merge. A feature is not complete until its specification, implementation,
+tests, and required spatial benchmarks provide evidence that these standards are met.
 
-Todo Pull Request, revisión de código y revisión de diseño DEBE verificar explícitamente
-el cumplimiento de los documentos aplicables del directorio `constitution/`. La
-complejidad que se aparte de estas normas DEBE justificarse y documentarse.
+## Additional Constraints
 
-## Governing Documents
+HomeVal MUST use aggregated geographic units as the smallest spatial scope for stored
+data and analytics. No feature may introduce address-level, household-level, or
+person-level storage without a formal constitutional amendment that is demonstrably
+compatible with the zero-PII rule; such an amendment MUST NOT weaken applicable law.
 
-Los siguientes documentos son de obligado cumplimiento y referencia en todo el ciclo de
-vida del proyecto. Deben considerarse junto a la arquitectura definida en
-`docs/03-arquitectura-y-tech-stack.md`:
-
-- `constitution/BACKEND.md` — principios rectores, organización del código, estilo,
-  capa API (tRPC) y validación del backend.
-- `constitution/DATABASE.md` — modelado, tipos de datos, relaciones, constraints,
-  índices y performance de la base de datos.
-- `constitution/DESIGN.md` — filosofía de diseño, paleta de colores, tipografía,
-  tokens visuales y accesibilidad (tema `profesional-seguro`).
-- `constitution/FRONTEND.md` — principios server-first, organización del código,
-  estilo, componentes y estado del cliente.
-- `constitution/SECURITY.md` — autenticación, autorización, protección de datos,
-  seguridad de APIs y cumplimiento GDPR.
-- `constitution/TESTING.md` — pirámide de testing, unitarios, integración y E2E.
-
-Cuando un documento referencia a otro (p. ej. `FRONTEND.md` exige `DESIGN.md`), esa
-referencia es vinculante y forma parte de la norma.
+Public-data ingestion MUST retain source attribution, acquisition metadata, and the
+transformation steps needed to reproduce derived datasets. Model releases MUST identify
+the training data, feature definitions, evaluation population, metrics, and known
+limitations. Documentation and user-facing explanations MUST distinguish observed data,
+inferences, and estimates.
 
 ## Development Workflow & Quality Gates
 
-Todo trabajo de desarrollo o diseño debe pasar por las siguientes compuertas de calidad
-antes de considerarse completado:
+All feature work MUST pass these gates before merge:
 
-1. **Consulta previa de los documentos.** Antes de implementar o diseñar, leer y aplicar
-   los documentos del directorio `constitution/` correspondientes al dominio en cuestión.
-2. **Cumplimiento en revisión.** Las revisiones de código y de diseño validan el
-   cumplimiento explícito de las normas aplicables.
-3. **Puertas de testing.** El testing sigue la pirámide definida en `TESTING.md`
-   (unitarios, integración y E2E) con los tiempos y herramientas establecidos.
-4. **Seguridad por diseño.** Ninguna funcionalidad se considera lista si incumple
-   `SECURITY.md`; la seguridad no se añade al final, se define en cada decisión.
+1. The complete SpecKit workflow MUST be followed and its artifacts MUST be available
+   for review.
+2. Tests MUST cover changed behavior, including regression cases. Strict type checking
+   MUST pass without introducing unreviewed type escapes.
+3. Data, privacy, and compliance checks MUST confirm that no PII is stored or emitted.
+4. Model changes MUST include reproducible evaluation metrics and feature attributions.
+5. Spatial changes MUST include indexing and query performance benchmarks with recorded
+   methodology and measurable results.
+6. Reviewers MUST verify alignment with this constitution and document any approved
+   deviation through a formal amendment or an explicitly recorded exception.
 
 ## Governance
 
-Esta constitución tiene primacía sobre cualquier práctica de desarrollo no formalizada.
-Cualquier conflicto entre documentos, políticas o convenciones se resuelve a favor de lo
-dispuesto en esta constitución y en el directorio `constitution/`.
+This constitution is the highest-level project governance document. If an implementation
+practice conflicts with it, the constitution prevails until formally amended.
 
-**Procedimiento de enmienda:**
-1. Toda modificación a esta constitución o a los documentos del directorio
-   `constitution/` DEBE documentarse, justificarse y revisarse.
-2. Las enmiendas se registran con un incremento de versión semántica (ver política).
-3. Un cambio que retire o redefina un principio rector constituye una enmienda MAJOR.
+**Amendment procedure:**
+1. A proposed amendment MUST state the affected principle or section, rationale,
+   compatibility impact, and migration requirements.
+2. The amendment MUST be reviewed for mission alignment, GDPR and Spanish compliance,
+   privacy impact, reproducibility, explainability, testing, and spatial performance.
+3. The approved amendment MUST update this document and its Sync Impact Report in the
+   same change.
+4. Affected SpecKit artifacts and implementation guidance MUST be updated after the
+   amendment when the amendment changes feature-development requirements.
 
-**Política de versionado (semántico):**
-- **MAJOR**: eliminación o redefinición incompatible de principios o normal de gobernanza.
-- **MINOR**: adición de un principio o expansión sustancial de la guía.
-- **PATCH**: aclaraciones, redacción, correcciones tipográficas o refinamientos no semánticos.
+**Versioning policy (semantic):**
+- **MAJOR**: removal or incompatible redefinition of a principle or governance rule.
+- **MINOR**: addition of a principle or material expansion of governance requirements.
+- **PATCH**: clarification, wording, typo correction, or other non-semantic refinement.
 
-**Expectativas de revisión de cumplimiento:**
-- Toda PR/revisión DEBE verificar el cumplimiento de los documentos aplicables.
-- Las desviaciones DEBEN estar justificadas y documentadas de forma explícita.
-- El directorio `constitution/` es la guía de desarrollo en tiempo de ejecución del
-  proyecto y DEBE mantenerse como única fuente de verdad normativa.
+**Compliance review expectations:**
+- Every pull request and formal review MUST verify the applicable principles and quality
+  gates.
+- Compliance reviews MUST record evidence for privacy, provenance, explainability, tests,
+  and spatial benchmarks when those areas are affected.
+- Suspected PII exposure, irreproducible outputs, unexplained predictions, or missing
+  required benchmarks MUST block release until resolved or formally amended.
 
-**Version**: 1.0.0 | **Ratified**: TODO(RATIFICATION_DATE): fecha de adopción original no conocida | **Last Amended**: 2026-08-25
+**Version**: 2.0.0 | **Ratified**: TODO(RATIFICATION_DATE): original adoption date not provided | **Last Amended**: 2026-10-26
